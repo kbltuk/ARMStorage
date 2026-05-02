@@ -1,0 +1,177 @@
+﻿<Window x:Class="ARM.Client.Views.ProductDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}" 
+        Height="550" 
+        Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+
+    <Window.Resources>
+        <Style TargetType="TextBox" x:Key="FormTextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#3498DB"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ComboBox" x:Key="FormComboBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <TextBlock Grid.Row="0" 
+                       Text="{Binding Title}" 
+                       FontSize="20" 
+                       FontWeight="Bold"
+                       Foreground="#2C3E50"
+                       Margin="0,0,0,20"/>
+
+            <!-- Разделитель -->
+            <Rectangle Grid.Row="1" Height="1" Fill="#ECF0F1" Margin="0,0,0,20"/>
+
+            <!-- Название товара -->
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Название товара *" 
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"/>
+                <TextBox Text="{Binding Product.Name, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormTextBox}"/>
+            </StackPanel>
+
+            <!-- Категория -->
+            <StackPanel Grid.Row="3">
+                <TextBlock Text="Категория *" 
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"/>
+                <ComboBox ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding Product.Category}"
+                          DisplayMemberPath="Name"
+                          Style="{StaticResource FormComboBox}"/>
+            </StackPanel>
+
+            <!-- Цена -->
+            <StackPanel Grid.Row="4">
+                <TextBlock Text="Цена *" 
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"/>
+                <TextBox Text="{Binding Product.Price, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormTextBox}"/>
+            </StackPanel>
+
+            <!-- Количество -->
+            <StackPanel Grid.Row="5">
+                <TextBlock Text="Количество" 
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"/>
+                <TextBox Text="{Binding Product.Quantity, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FormTextBox}"/>
+            </StackPanel>
+
+            <!-- Описание -->
+            <StackPanel Grid.Row="6">
+                <TextBlock Text="Описание" 
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"/>
+                <TextBox Text="{Binding Product.Description}"
+                         Height="80"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+
+            <!-- Ошибки валидации -->
+            <ItemsControl Grid.Row="7" 
+                          ItemsSource="{Binding ValidationErrors}"
+                          Margin="0,10,0,10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" 
+                                   Foreground="#E74C3C" 
+                                   FontSize="12"
+                                   Margin="0,2,0,2"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Кнопки -->
+            <Grid Grid.Row="8" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" 
+                        Content="Сохранить" 
+                        Command="{Binding SaveCommand}"
+                        Background="#27AE60" 
+                        Foreground="White"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        FontWeight="Bold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center" 
+                                                  Margin="0,10"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Column="1" 
+                        Content="Отмена" 
+                        Command="{Binding CancelCommand}"
+                        Background="#95A5A6" 
+                        Foreground="White"
+                        Height="40"
+                        Margin="10,0,0,0"
+                        FontWeight="Bold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center" 
+                                                  Margin="0,10"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
